@@ -19,4 +19,5 @@ pipeline {
           sh "docker build -t luadham:javaapp:${env.GIT_COMMIT}"
         }
       }
+  }
 }
