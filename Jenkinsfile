@@ -12,7 +12,8 @@ pipeline {
         steps {
           sh "docker ps -a"
           echo "Current GIT Commit is ${env.GIT_COMMIT}"
-          sh "docker build -t luadham/javaapp:${env.GIT_COMMIT} ." //
+          sh "docker build -t luadham/javaapp:${env.GIT_COMMIT} ."
+          sh "docker push luadham/javaapp:${env.GIT_COMMIT}"
         }
       }
   }
