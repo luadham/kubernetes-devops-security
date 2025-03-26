@@ -8,17 +8,15 @@ pipeline {
               archive 'target/*.jar' //
             }
         }   
-    stage('Test Application') {
+      stage('Test Application') {
             steps {
               sh "mvn test"
             }
-        }  
-
-        stage('Dockerized The Application') {
-      echo "Current GIT Commit is ${env.GIT_COMMIT}"
-      sh "docker build -t luadham:javaapp:${env.GIT_COMMIT}"
-    }
-    }
-
-    
+        }
+      stage('Dockerized The Application') {
+        steps {
+          echo "Current GIT Commit is ${env.GIT_COMMIT}"
+          sh "docker build -t luadham:javaapp:${env.GIT_COMMIT}"
+        }
+      }
 }
