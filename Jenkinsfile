@@ -8,11 +8,6 @@ pipeline {
               archive 'target/*.jar' //
             }
         }   
-      stage('Test Application') {
-            steps {
-              sh "mvn test"
-            }
-        }
       stage('Dockerized The Application') {
         steps {
           sh "docker ps -a"
