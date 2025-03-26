@@ -14,4 +14,9 @@ pipeline {
             }
         }  
     }
+
+    stage('Dockerized The Application') {
+      echo "Current GIT Commit is ${env.GIT_COMMIT}"
+      sh "docker build -t luadham:javaapp:${env.GIT_COMMIT}"
+    }
 }
