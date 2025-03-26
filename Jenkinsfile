@@ -14,7 +14,7 @@ pipeline {
           echo "Current GIT Commit is ${env.GIT_COMMIT}"
           sh "docker build -t luadham/javaapp:${env.GIT_COMMIT} ."
           withDockerRegistry(credentialsId: 'docker-hub') {
-            sh "docker push luadham/javaapp:${env.GIT_COMMIT}"
+            sh "docker push luadham/javaapp:${env.GIT_COMMIT}" //
           }
         }
       }
