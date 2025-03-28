@@ -10,13 +10,19 @@ pipeline {
                 archive 'target/*.jar'
             }
         }
+        stage('Test Env') {
+            steps {
+                echo "$env"
+            }
+        }
+
         stage('Code Coverage') {
             steps {
-                echo "$token"
                 sh '''
                     mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
                      -Dsonar.projectName='Adham' \
-                     -Dsonar.token=${token}
+                     -Dsonar.token=${token} \
+                     -Dsonar.coverage.jacoco.xmlReportPaths=./coverage/jacoco.xml
                 '''
             }
         }
