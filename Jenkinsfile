@@ -10,9 +10,9 @@ pipeline {
                 archive 'target/*.jar'
             }
         }
-        stage('Test Env') {
+        stage('Start Unit Test') {
             steps {
-                echo "$env"
+                sh 'mvn clean test'
             }
         }
 
