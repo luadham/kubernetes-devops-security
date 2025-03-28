@@ -22,7 +22,7 @@ pipeline {
                     mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
                      -Dsonar.projectName='Adham' \
                      -Dsonar.token=${token} \
-                     -Dsonar.coverage.jacoco.xmlReportPaths=./coverage/jacoco.xml
+                     -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                 '''
             }
         }
