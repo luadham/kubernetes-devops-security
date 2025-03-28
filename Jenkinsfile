@@ -22,8 +22,8 @@ pipeline {
                             -Dsonar.projectName='Adham' \
                             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                         '''
-                        waitForQualityGate abortPipeline: true
                     }
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
