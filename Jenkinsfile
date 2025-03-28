@@ -15,12 +15,15 @@ pipeline {
 
         stage('Code Coverage') {
             steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                    sh '''
-                        mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
-                        -Dsonar.projectName='Adham' \
-                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-                    '''
+                timeout(time: 60, unit: 'SECONDS') {
+                    withSonarQubeEnv('SonarQubeServer') {
+                        sh '''
+                            mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
+                            -Dsonar.projectName='Adham' \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
+                        waitForQualityGate abortPipeline: true
+                    }
                 }
             }
         }
