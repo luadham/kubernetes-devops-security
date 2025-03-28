@@ -18,5 +18,10 @@ pipeline {
           }
         }
       }
+      stage('Code Quality Check') {
+        steps {
+          sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=Numeric-Application -Dsonar.projectName='Numeric Application'"
+        }
+      }
   }
 }
