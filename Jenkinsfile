@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Start Unit Test') {
             steps {
-                sh 'mvn clean test'
+                sh 'mvn clean test jacoco:report'
             }
         }
 
