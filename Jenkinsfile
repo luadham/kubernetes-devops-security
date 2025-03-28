@@ -1,26 +1,23 @@
 pipeline {
     agent any
-
+    environment {
+        token = credentials('sonar-qube-token')
+    }
     stages {
         stage('Build Artifact') {
             steps {
                 sh 'mvn clean package -DskipTests=true'
                 archive 'target/*.jar'
             }
-        }   
-        stage('Dockerized The Application') {
-            steps {
-                sh "docker ps -a"
-                echo "Current GIT Commit is ${env.GIT_COMMIT}"
-                sh "docker build -t luadham/javaapp:${env.GIT_COMMIT} ."
-                withDockerRegistry(credentialsId: 'docker-hub', url: '') {
-                    sh "docker push luadham/javaapp:${env.GIT_COMMIT}" 
-                }
-            }
         }
-        stage('Code Quality Check') {
+        stage('Code Coverage') {
             steps {
-                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=Numeric-Application -Dsonar.projectName='Numeric Application' -Dsonar.token=sqp_343d5eb9ee5f5a9b7822c57e19aa764555b13888"
+                echo "$token"
+                sh '''
+                    mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
+                     -Dsonar.projectName='Adham' \
+                     -Dsonar.token=${token}
+                '''
             }
         }
     }
