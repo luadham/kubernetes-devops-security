@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        token = credentials('sonar-qube-token')
-    }
     stages {
         stage('Build Artifact') {
             steps {
@@ -18,7 +15,7 @@ pipeline {
 
         stage('Code Coverage') {
             steps {
-                withSonarQubeEnv(credentialsId: token) {
+                withSonarQubeEnv('SonarQubeServer') {
                     sh '''
                         mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
                         -Dsonar.projectName='Adham' \
