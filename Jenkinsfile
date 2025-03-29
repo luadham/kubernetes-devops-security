@@ -13,25 +13,22 @@ pipeline {
             }
         }
 
-        // stage('Code Coverage') {
-        //     steps {
-        //         timeout(time: 60, unit: 'SECONDS') {
-        //             withSonarQubeEnv('SonarQubeServer') {
-        //                 sh '''
-        //                     mvn clean verify sonar:sonar -Dsonar.projectKey=Adham \
-        //                     -Dsonar.projectName='Adham' \
-        //                     -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-        //                 '''
-        //             }
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
-
         stage('OWASP Dependency Check') {
             steps {
                 sh "mvn dependency-check:check"
                 dependencyCheckPublisher pattern: 'target/dependency-check-report.html'
+            }
+        }
+
+        stage('Docker Build') {
+            environment {
+                dockerImage = "luadham/JavaApp:${GIT_COMMIT}"
+            }
+            steps {
+                sh "docker build -t ${dockerImage}"
+                withDockerRegistry(credentialsId: 'docker-hub') {
+                    sh "docker push ${dockerImage}"
+                }
             }
         }
     }
