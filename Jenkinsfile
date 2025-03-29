@@ -22,7 +22,7 @@ pipeline {
 
         stage('Docker Build') {
             environment {
-                dockerImage = "luadham/JavaApp:${GIT_COMMIT}"
+                dockerImage = "luadham/javaapp:${GIT_COMMIT}"
             }
             steps {
                 sh "docker build -t ${dockerImage} ."
