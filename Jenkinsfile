@@ -26,7 +26,7 @@ pipeline {
             }
             steps {
                 sh "docker build -t ${dockerImage}"
-                withDockerRegistry(credentialsId: 'docker-hub') {
+                withDockerRegistry(credentialsId: 'docker-hub', url: '') {
                     sh "docker push ${dockerImage}"
                 }
             }
