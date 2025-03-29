@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker -rm run aquasec/trivy --severity HIGH,CRITICAL --exit-code 1 image openjdk:8-jdk-alpine
+docker run -rm aquasec/trivy --severity HIGH,CRITICAL --exit-code 1 image openjdk:8-jdk-alpine
 
 if [ $? -eq 1 ]
 then
