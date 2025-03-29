@@ -25,7 +25,7 @@ pipeline {
                 dockerImage = "luadham/JavaApp:${GIT_COMMIT}"
             }
             steps {
-                sh "docker build -t ${dockerImage}"
+                sh "docker build -t ${dockerImage} ."
                 withDockerRegistry(credentialsId: 'docker-hub', url: '') {
                     sh "docker push ${dockerImage}"
                 }
