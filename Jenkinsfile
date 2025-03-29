@@ -21,7 +21,7 @@ pipeline {
                          dependencyCheckPublisher pattern: 'target/dependency-check-report.html'
                     },
                     'Run Trivy Scan': {
-                        sh 'docker run aquasec/trivy image openjdk:8-jdk-alpine'
+                        sh 'bash trivy-image-scan.sh'
                     }
                 )
             }
