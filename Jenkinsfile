@@ -15,8 +15,15 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                sh "mvn dependency-check:check"
-                dependencyCheckPublisher pattern: 'target/dependency-check-report.html'
+                parallel(
+                    'Run OWASP Dependency': {
+                         sh 'mvn dependency-check:check'
+                         dependencyCheckPublisher pattern: 'target/dependency-check-report.html'
+                    },
+                    'Run Trivy Scan': {
+                        sh 'docker run aquasec/trivy image openjdk:8-jdk-alpine'
+                    }
+                )
             }
         }
 
