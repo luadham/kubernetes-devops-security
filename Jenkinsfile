@@ -26,7 +26,7 @@ pipeline {
                     'Run OPA Conftest': {
                         sh '''
                             docker run --rm -v $(pwd):/project openpolicyagent/conftest \
-                            test Dockerfile -p dockerfile-security.rego
+                            test Dockerfile --policy dockerfile-security.rego
                         '''
                     }
                 )
