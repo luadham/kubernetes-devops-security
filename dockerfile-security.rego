@@ -26,15 +26,15 @@ deny[msg] {
     input[i].Cmd == "from"
     val := split(input[i].Value[0], "/")
     count(val) > 1
-    msg = sprintf("Line %d: use a trusted base image", [i])
+    msg = sprintf("Line %d: Use a trusted base image", [i])
 }
 
-# Do not use 'latest' tag for base imagedeny[msg] {
+# Do not use 'latest' tag for base image
 deny[msg] {
     input[i].Cmd == "from"
     val := split(input[i].Value[0], ":")
     contains(lower(val[1]), "latest")
-    msg = sprintf("Line %d: do not use 'latest' tag for base images", [i])
+    msg = sprintf("Line %d: Do not use 'latest' tag for base images", [i])
 }
 
 # Avoid curl bashing
@@ -52,7 +52,7 @@ warn[msg] {
     val := concat(" ", input[i].Value)
     matches := regex.match(".*?(apk|yum|dnf|apt|pip).+?(install|[dist-|check-|group]?up[grade|date]).*", lower(val))
     matches == true
-    msg = sprintf("Line: %d: Do not upgrade your system packages: %s", [i, val])
+    msg = sprintf("Line %d: Do not upgrade your system packages: %s", [i, val])
 }
 
 # Do not use ADD if possible
@@ -63,8 +63,8 @@ deny[msg] {
 
 # Any user...
 any_user {
-    input[i].Cmd == "user"
- }
+    input[_].Cmd == "user"  # Simplified; no need for i here
+}
 
 deny[msg] {
     not any_user
@@ -79,10 +79,11 @@ forbidden_users = [
 ]
 
 deny[msg] {
-    command := "user"
-    users := [name | input[i].Cmd == "user"; name := input[i].Value]
-    lastuser := users[count(users)-1]
-    contains(lower(lastuser[_]), forbidden_users[_])
+    input[i].Cmd == "user"  # Bind i explicitly to a USER instruction
+    users := [name | input[j].Cmd == "user"; name := input[j].Value]  # Collect all USER values
+    count(users) > 0  # Ensure there’s at least one USER
+    lastuser := users[count(users)-1][0]  # Take the first element of the last USER value (assuming Value is an array)
+    contains(lower(lastuser), forbidden_users[_])  # Check if lastuser matches a forbidden user
     msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
 
@@ -103,5 +104,5 @@ multi_stage = true {
 }
 deny[msg] {
     multi_stage == false
-    msg = sprintf("You COPY, but do not appear to use multi-stage builds...", [])
+    msg = "You COPY, but do not appear to use multi-stage builds..."
 }
